@@ -28,10 +28,20 @@ class Signup extends Component {
             password: password
         };
         this.signup(user)
+        .then(data => {
+            if (data.error) this.setState({error: data.error})
+            else
+                this.setState({
+                    error: "",
+                    name: "",
+                    email: "",
+                    password: ""
+                })
+        })
         
     }
     signup=(user) => {
-        fetch("http://localhost:8080/signup", {
+        return fetch("http://localhost:8080/signup", {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -52,7 +62,7 @@ class Signup extends Component {
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Sign Up</h2>
-
+                <div className="alert alert-danger" style={{display: this.state.error ? "": "none"}}>{this.state.error}</div>
                 <form>
                     <div className="form-group">
                         <label className="text-muted">Name</label>
