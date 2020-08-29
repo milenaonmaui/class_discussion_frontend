@@ -7,11 +7,14 @@ class Signup extends Component {
             name: "",
             email: "",
             password: "",
-            error: ""
+            error: "",
+            open: false
         }
     }
 
     handleChange = (field) => (event) => {
+        //clear errors when user starts entering
+        this.setState({error: ""})
         this.setState({
             [field]: event.target.value
         })
@@ -35,7 +38,8 @@ class Signup extends Component {
                     error: "",
                     name: "",
                     email: "",
-                    password: ""
+                    password: "",
+                    open: true
                 })
         })
         
@@ -63,6 +67,7 @@ class Signup extends Component {
             <div className="container">
                 <h2 className="mt-5 mb-5">Sign Up</h2>
                 <div className="alert alert-danger" style={{display: this.state.error ? "": "none"}}>{this.state.error}</div>
+                <div className="alert alert-info" style={{display: this.state.open ? "": "none"}}>Account created successfully! Please sign-in.</div>
                 <form>
                     <div className="form-group">
                         <label className="text-muted">Name</label>
