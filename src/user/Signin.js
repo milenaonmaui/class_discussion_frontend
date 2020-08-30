@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import {Redirect} from 'react-router-dom'
+
 
 class Signin extends Component {
     constructor(){
@@ -7,7 +9,8 @@ class Signin extends Component {
             email: "",
             password: "",
             error: "",
-            redirectToRefer: false
+            redirectToReferer: false,
+            loading: false
         }
     }
 
@@ -18,9 +21,17 @@ class Signin extends Component {
             [field]: event.target.value
         })
     }
+
+    authenticate(jwt, callback) {
+        if(typeof window !== "undefined"){
+            localStorage.setItem("jwt", JSON.stringify(jwt));
+            callback()
+        }
+    }
     handleSubmit = (ev) => {
         //first, prevent default realoding page behavior
         ev.preventDefault();
+        this.setState({loading: true})
         //destructure data from state
         const {email, password} =this.state
         //create new user object
@@ -28,12 +39,17 @@ class Signin extends Component {
             email: email,
             password: password
         };
+        console.log(user)
         this.signin(user)
         .then(data => {
-            if (data.error) this.setState({error: data.error})
+            if (data.error) this.setState({error: data.error, loading:false})
             else{
-                //if successful, first autheticate
 
+                //console.log(data)
+                //if successful, first autheticate
+                this.authenticate(data.token, () => {
+                    this.setState({redirectToReferer: true})
+                })
                 //then redirect
             }
         })
@@ -58,10 +74,14 @@ class Signin extends Component {
     }
 
     render() {
+        if(this.state.redirectToReferer) {
+            return <Redirect to="/" />
+        }
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Sign In</h2>
                 <div className="alert alert-danger" style={{display: this.state.error ? "": "none"}}>{this.state.error}</div>
+                {this.state.loading ? (<div className="jumbotron text-center"><h2>Loading...</h2></div>) : ("")}
                 <form>
                     <div className="form-group">
                         <label className="text-muted">Email</label>
