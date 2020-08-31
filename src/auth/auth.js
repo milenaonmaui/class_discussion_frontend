@@ -1,5 +1,9 @@
+require('dotenv').config()
+
 export const signup=(user) => {
-        return fetch("http://localhost:8080/signup", {
+        const url = `${process.env.REACT_APP_API_URL}/signup`
+        console.log("Sign up URL ", url)
+        return fetch(url, {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -17,7 +21,8 @@ export const signup=(user) => {
 }
 
 export const signin=(user) => {
-    return fetch("http://localhost:8080/signin", {
+    const url = `${process.env.REACT_APP_API_URL}/signin`
+    return fetch(url, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -43,10 +48,11 @@ export const authenticate=(jwt, user, callback)=>{
 }
 
 export const signout = (next)=>{
+    const url = `${process.env.REACT_APP_API_URL}/signout`
     if(typeof window !== "undefined"){
         localStorage.removeItem("jwt");
         next()
-        return fetch("http://localhost:8080/signout", {
+        return fetch(url, {
             method: "GET"
         })
         .then(response => {
@@ -63,7 +69,7 @@ export const isAuthenticated = () => {
         return false
     }
     if(localStorage.getItem("jwt")){
-        return JSON.parse(localStorage.getItem("user"))
+        return {jwt: JSON.parse(localStorage.getItem("jwt")), user: JSON.parse(localStorage.getItem("user"))}
     } else {
         return false
     }
