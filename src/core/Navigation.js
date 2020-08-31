@@ -33,7 +33,7 @@ const Navigation = ({history})=>(
                     <button type="button" className="btn btn-link nav-link" onClick={() => signout(()=>history.push('/signin'))}>Sign Out</button>   
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" style={isActive(history,"/signup")} to={`/user/${isAuthenticated()._id}`}>{`${isAuthenticated().user.name}'s Profile`}</Link>   
+                    <Link className="nav-link" style={isActive(history,"/signup")} to={`/user/${isAuthenticated().user._id}`}>{`${isAuthenticated().user.name}'s Profile`}</Link>   
                 </li>
             </>
             )}
